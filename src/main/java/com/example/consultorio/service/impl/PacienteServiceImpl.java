@@ -4,10 +4,7 @@ import com.example.consultorio.model.Paciente;
 import com.example.consultorio.service.IPacienteService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 
@@ -17,13 +14,13 @@ public class PacienteServiceImpl implements IPacienteService<Paciente> {
 
     @Override
     public Paciente salvar(Paciente paciente) {
-        pacienteMap.put(paciente.getId(),paciente);
+        pacienteMap.put(pacienteMap.size()+1,paciente);
         return paciente;
     }
 
     @Override
-    public Paciente buscar(int id) {
-        return pacienteMap.get(id);
+    public Optional<Paciente> buscar(int id) {
+        return Optional.ofNullable(pacienteMap.get(id));
     }
 
     @Override
@@ -32,9 +29,9 @@ public class PacienteServiceImpl implements IPacienteService<Paciente> {
     }
 
     @Override
-    public Paciente atualizar(int id,Paciente paciente) {
+    public Optional<Paciente> atualizar(int id,Paciente paciente) {
         pacienteMap.put(id,paciente);
-        return paciente;
+        return Optional.ofNullable(paciente);
     }
 
     @Override

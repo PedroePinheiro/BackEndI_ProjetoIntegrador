@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequestMapping("/dentistas")
 @RestController
@@ -14,24 +15,24 @@ public class DentistaController {
     @Autowired
     private DentistaServiceImpl dentistaService;
 
-    @GetMapping
-    public Dentista salvar(){
-        return null;
+    @PostMapping
+    public Dentista salvar(@RequestBody Dentista dentista){
+        return dentistaService.salvar(dentista);
     }
 
     @GetMapping ("/{matriculaCadastro}")
-    public Dentista buscar(@PathVariable int matriculaCadastro){
+    public Optional<Dentista> buscar(@PathVariable int matriculaCadastro){
         return dentistaService.buscar(matriculaCadastro);
     }
 
-    @GetMapping ("/buscar")
+    @GetMapping
     public List<Dentista> buscarTodos(){
         return dentistaService.buscarTodos();
     }
 
     @PutMapping("/{matriculaCadastro}")
-    public Dentista atualizar(){
-        return null;
+    public Optional<Dentista> atualizar(@PathVariable int matriculaCadastro, @RequestBody Dentista dentista){
+        return dentistaService.atualizar(matriculaCadastro, dentista);
     }
 
 }

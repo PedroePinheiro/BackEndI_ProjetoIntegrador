@@ -11,6 +11,9 @@ public class Paciente {
     private String rg;
     private LocalDate dataAlta;
 
+    public Paciente() {
+    }
+
     public Paciente(int id, String nome, String sobrenome, Endereco endereco, String rg, LocalDate dataAlta) {
         this.id = id;
         this.nome = nome;

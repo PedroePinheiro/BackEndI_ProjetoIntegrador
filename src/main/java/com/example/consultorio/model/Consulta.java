@@ -9,10 +9,16 @@ public class Consulta {
     private Dentista dentista;
     private LocalDateTime horarioConsulta;
 
+    private Boolean cancelada;
+
+    public Consulta() {
+    }
+
     public Consulta(Paciente paciente, Dentista dentista, LocalDateTime horarioConsulta) {
         this.paciente = paciente;
         this.dentista = dentista;
         this.horarioConsulta = horarioConsulta;
+        this.cancelada = false;
     }
 
     public Consulta(int id, Paciente paciente, Dentista dentista, LocalDateTime horarioConsulta) {
@@ -20,6 +26,15 @@ public class Consulta {
         this.paciente = paciente;
         this.dentista = dentista;
         this.horarioConsulta = horarioConsulta;
+        this.cancelada = false;
+    }
+
+    public Boolean getCancelada() {
+        return cancelada;
+    }
+
+    public void setCancelada(Boolean cancelada) {
+        this.cancelada = cancelada;
     }
 
     public int getId() {
