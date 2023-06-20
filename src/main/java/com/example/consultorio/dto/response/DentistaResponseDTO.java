@@ -1,10 +1,10 @@
-package com.example.consultorio.model;
+package com.example.consultorio.dto.response;
 
-import com.example.consultorio.dto.response.DentistaConsultaResponseDTO;
-import com.fasterxml.jackson.annotation.*;
+import com.example.consultorio.model.Consulta;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.OneToMany;
 import java.util.List;
 
 @Getter
@@ -15,20 +15,11 @@ import java.util.List;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 
-
-@Entity
-@Table(name="TB_DENTISTAS")
-public class Dentista {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "matricula_dentista")
+public class DentistaResponseDTO {
     private Integer matriculaCadastro; //ID
-
-
     private String nome;
     private String sobrenome;
 
     @OneToMany(mappedBy = "dentista")
     private List<DentistaConsultaResponseDTO> consultas;
-
 }

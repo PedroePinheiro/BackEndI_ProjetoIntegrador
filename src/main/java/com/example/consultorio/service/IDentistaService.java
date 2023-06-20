@@ -1,15 +1,17 @@
 package com.example.consultorio.service;
 
+import com.example.consultorio.dto.response.DentistaResponseDTO;
+import com.example.consultorio.model.Dentista;
+
 import java.util.List;
 import java.util.Optional;
 
-public interface IDentistaService<T> {
+public interface IDentistaService {
 
-    T salvar(T t);
+    DentistaResponseDTO salvar(Dentista dentista);
 
-    Optional<T> buscar(int matriculaCadastro);
-    List<T> buscarTodos();
+    Optional<DentistaResponseDTO> buscar(int matriculaCadastro);
+    List<DentistaResponseDTO> buscarTodos();
 
-    Optional<T> atualizar(int matriculaCadastro, T t);
-
+    Optional<DentistaResponseDTO> atualizar(int matriculaCadastro, Dentista dentista);
 }

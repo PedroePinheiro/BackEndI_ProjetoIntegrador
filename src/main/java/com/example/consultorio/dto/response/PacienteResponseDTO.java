@@ -1,9 +1,13 @@
-package com.example.consultorio.model;
-import com.example.consultorio.dto.response.PacienteConsultaResponseDTO;
+package com.example.consultorio.dto.response;
+
+import com.example.consultorio.model.Endereco;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -15,13 +19,7 @@ import java.util.List;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 
-
-@Entity
-@Table(name="TB_PACIENTES")
-public class Paciente {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PacienteResponseDTO {
     private int id;
 
     private String nome;

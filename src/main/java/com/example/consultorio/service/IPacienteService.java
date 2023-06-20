@@ -1,15 +1,18 @@
 package com.example.consultorio.service;
 
+import com.example.consultorio.dto.response.PacienteResponseDTO;
+import com.example.consultorio.model.Paciente;
+
 import java.util.List;
 import java.util.Optional;
 
-public interface IPacienteService<T> {
-    T salvar(T t);
+public interface IPacienteService {
+    PacienteResponseDTO salvar(Paciente t);
 
-    Optional<T> buscar(int id);
-    List<T> buscarTodos();
+    Optional<PacienteResponseDTO> buscar(int id);
+    List<PacienteResponseDTO> buscarTodos();
 
-    Optional<T> atualizar(int id, T t);
+    Optional<PacienteResponseDTO> atualizar(int id, Paciente t);
 
     String excluir(int id);
 

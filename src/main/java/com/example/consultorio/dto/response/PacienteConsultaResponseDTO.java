@@ -1,9 +1,12 @@
-package com.example.consultorio.model;
+package com.example.consultorio.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,20 +19,12 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "TB_CONSULTAS")
-
-public class Consulta {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PacienteConsultaResponseDTO {
     private Integer id;
     private LocalDateTime horarioConsulta;
     private Boolean cancelada;
 
     @ManyToOne
     @JoinColumn(name = "dentista_id")
-    private Dentista dentista;
-
-    @ManyToOne
-    @JoinColumn(name = "paciente_id")
-    private Paciente paciente;
-
+    private ConsultaDentistaResponseDTO dentista;
 }
