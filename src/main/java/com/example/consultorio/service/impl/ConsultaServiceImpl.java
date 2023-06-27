@@ -7,6 +7,8 @@ import com.example.consultorio.model.Dentista;
 import com.example.consultorio.model.Paciente;
 import com.example.consultorio.repository.IConsultaRepository;
 import com.example.consultorio.service.IConsultaService;
+import com.example.consultorio.service.IDentistaService;
+import com.example.consultorio.service.IPacienteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +24,9 @@ public class ConsultaServiceImpl implements IConsultaService{
     @Autowired
     private IConsultaRepository iConsultaRepository;
     @Autowired
-    private DentistaServiceImpl dentistaService;
+    private IDentistaService dentistaService;
     @Autowired
-    private PacienteServiceImpl pacienteService;
+    private IPacienteService pacienteService;
 
     @Autowired
     private ObjectMapper mapper;
@@ -36,8 +38,8 @@ public class ConsultaServiceImpl implements IConsultaService{
         ConsultaResponseDTO consultaResponseDTO = null;
         if (pacienteDTO.isPresent() && dentistaDTO.isPresent()){
             mapper.registerModule(new JavaTimeModule());
-            Paciente paciente = mapper.convertValue(pacienteDTO,Paciente.class);
-            Dentista dentista = mapper.convertValue(dentistaDTO,Dentista.class);
+            Paciente paciente = mapper.convertValue(pacienteDTO.get(),Paciente.class);
+            Dentista dentista = mapper.convertValue(dentistaDTO.get(),Dentista.class);
             Consulta consulta = new Consulta(0,requestDTO.getHorarioConsulta(),false,dentista,paciente);
             Consulta save = iConsultaRepository.save(consulta);
             consultaResponseDTO = mapper.convertValue(save,ConsultaResponseDTO.class);

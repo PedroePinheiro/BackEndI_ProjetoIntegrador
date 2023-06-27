@@ -3,6 +3,8 @@ package com.example.consultorio.dto.response;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -12,8 +14,8 @@ import lombok.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 
 public class ConsultaDentistaResponseDTO {
-    private Integer matriculaCadastro; //ID
-    private String nome;
-    private String sobrenome;
-
+    private int id;
+    private LocalDateTime horarioConsulta;
+    private boolean cancelada;
+    private PacienteResponseDTO paciente;
 }

@@ -1,12 +1,9 @@
-package com.example.consultorio.dto.response;
-
+package com.example.consultorio.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
-import javax.persistence.OneToMany;
 import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,11 +12,9 @@ import java.util.List;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 
-public class DentistaResponseDTO {
-    private Integer matriculaCadastro; //ID
+public class DentistaRequestDTO {
+    private int matriculaCadastro;
     private String nome;
     private String sobrenome;
-
-    @OneToMany(mappedBy = "dentista")
-    private List<ConsultaResponseDTO> consultas;
+    private List<ConsultaRequestDTO> consultas;
 }

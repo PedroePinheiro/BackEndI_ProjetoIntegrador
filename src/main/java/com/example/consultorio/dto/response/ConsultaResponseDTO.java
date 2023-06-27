@@ -3,10 +3,7 @@ package com.example.consultorio.dto.response;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,7 +13,11 @@ import java.time.LocalDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 
 public class ConsultaResponseDTO {
-    private Integer id;
+    private int id;
     private LocalDateTime horarioConsulta;
-    private Boolean cancelada;
+    private boolean cancelada;
+    @JsonIgnoreProperties("consultas")
+    private DentistaResponseDTO dentista;
+    @JsonIgnoreProperties("consultas")
+    private PacienteResponseDTO paciente;
 }

@@ -1,5 +1,6 @@
 package com.example.consultorio.service.impl;
 
+import com.example.consultorio.dto.request.PacienteRequestDTO;
 import com.example.consultorio.dto.response.PacienteResponseDTO;
 import com.example.consultorio.model.Paciente;
 import com.example.consultorio.repository.IPacienteRepository;
@@ -21,10 +22,12 @@ public class PacienteServiceImpl implements IPacienteService{
     private ObjectMapper mapper;
 
     @Override
-    public PacienteResponseDTO salvar(Paciente paciente) {
-        Paciente save = iPacienteRepository.save(paciente);
-        save.setConsultas(new ArrayList());
-        return mapper.convertValue(save,PacienteResponseDTO.class);
+    public Optional<PacienteResponseDTO> salvar(PacienteRequestDTO pacienteRequestDTO) {
+        Paciente paciente = mapper.convertValue(pacienteRequestDTO, Paciente.class);
+        Paciente savedPaciente = iPacienteRepository.save(paciente);
+        PacienteResponseDTO pacienteResponseDTO = mapper.convertValue(savedPaciente, PacienteResponseDTO.class);
+        pacienteResponseDTO.setConsultas(new ArrayList<>());
+        return Optional.ofNullable(pacienteResponseDTO);
     }
 
     @Override
@@ -44,15 +47,21 @@ public class PacienteServiceImpl implements IPacienteService{
     }
 
     @Override
-    public Optional<PacienteResponseDTO> atualizar(int id,Paciente paciente){
+    public Optional<PacienteResponseDTO> atualizar(int id,PacienteRequestDTO pacienteRequestDTO){
         Optional<Paciente> pacienteBusca = iPacienteRepository.findById(id);
-        Optional<PacienteResponseDTO> pacienteResponseDTO = null;
+        Optional<PacienteResponseDTO> responseDTO = null;
         if (pacienteBusca.isPresent()){
+            Paciente paciente = pacienteBusca.get();
             paciente.setId(id);
-            Paciente save = iPacienteRepository.save(paciente);
-            pacienteResponseDTO = Optional.ofNullable(mapper.convertValue(save, PacienteResponseDTO.class));
+            paciente.setNome(pacienteRequestDTO.getNome());
+            paciente.setSobrenome(pacienteRequestDTO.getSobrenome());
+            paciente.setRg(pacienteRequestDTO.getRg());
+            paciente.setDataAlta(pacienteRequestDTO.getDataAlta());
+            paciente.setEndereco(pacienteRequestDTO.getEndereco());
+            Paciente pacienteSalvo = iPacienteRepository.save(paciente);
+            responseDTO = Optional.ofNullable(mapper.convertValue(pacienteSalvo, PacienteResponseDTO.class));
         }
-        return pacienteResponseDTO;
+        return responseDTO;
     }
 
     @Override

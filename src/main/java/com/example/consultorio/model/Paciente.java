@@ -1,5 +1,4 @@
 package com.example.consultorio.model;
-import com.example.consultorio.dto.response.PacienteConsultaResponseDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
@@ -13,11 +12,9 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
-
-
 @Entity
 @Table(name="TB_PACIENTES")
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Paciente {
 
     @Id
@@ -33,7 +30,7 @@ public class Paciente {
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     private Endereco endereco;
 
-    @OneToMany(mappedBy = "paciente")
-    private List<PacienteConsultaResponseDTO> consultas;
+    @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Consulta> consultas;
 
 }

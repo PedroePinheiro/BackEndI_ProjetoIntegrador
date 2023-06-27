@@ -1,7 +1,7 @@
 package com.example.consultorio.controller;
 
+import com.example.consultorio.dto.request.DentistaRequestDTO;
 import com.example.consultorio.dto.response.DentistaResponseDTO;
-import com.example.consultorio.model.Dentista;
 import com.example.consultorio.service.impl.DentistaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,8 +19,8 @@ public class DentistaController {
     private DentistaServiceImpl dentistaService;
 
     @PostMapping
-    public ResponseEntity<DentistaResponseDTO> salvar(@RequestBody Dentista dentista){
-        return ResponseEntity.status(HttpStatus.CREATED).body(dentistaService.salvar(dentista));
+    public ResponseEntity<Optional<DentistaResponseDTO>> salvar(@RequestBody DentistaRequestDTO requestDTO){
+        return ResponseEntity.status(HttpStatus.CREATED).body(dentistaService.salvar(requestDTO));
     }
 
     @GetMapping ("/{matriculaCadastro}")
@@ -34,15 +34,16 @@ public class DentistaController {
     }
 
     @GetMapping
-    public List<DentistaResponseDTO> buscarTodos(){
-        return dentistaService.buscarTodos();
+    public  ResponseEntity<List<DentistaResponseDTO>> buscarTodos(){
+        List<DentistaResponseDTO> dentistaResponseDTOList = dentistaService.buscarTodos();
+        return ResponseEntity.status(HttpStatus.OK).body(dentistaResponseDTOList);
     }
 
     @PutMapping("/{matriculaCadastro}")
-    public ResponseEntity<Optional<DentistaResponseDTO>> atualizar(@PathVariable int matriculaCadastro, @RequestBody Dentista dentista){
-       Optional<DentistaResponseDTO> dentistaBusca = dentistaService.buscar(matriculaCadastro);
+    public ResponseEntity<Optional<DentistaResponseDTO>> atualizar(@PathVariable int matriculaCadastro, @RequestBody DentistaRequestDTO requestDTO){
+       Optional<DentistaResponseDTO> dentistaBusca = dentistaService.atualizar(matriculaCadastro,requestDTO);
        if (dentistaBusca.isPresent()){
-           dentistaService.atualizar(matriculaCadastro, dentista);
+           dentistaService.atualizar(matriculaCadastro, requestDTO);
            return ResponseEntity.status(HttpStatus.OK).build();
        }else {
            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

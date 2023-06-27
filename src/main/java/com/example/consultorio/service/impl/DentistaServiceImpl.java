@@ -1,6 +1,6 @@
 package com.example.consultorio.service.impl;
 
-import com.example.consultorio.dto.response.DentistaConsultaResponseDTO;
+import com.example.consultorio.dto.request.DentistaRequestDTO;
 import com.example.consultorio.dto.response.DentistaResponseDTO;
 import com.example.consultorio.model.Dentista;
 import com.example.consultorio.repository.IDentistaRepository;
@@ -21,59 +21,42 @@ public class DentistaServiceImpl implements IDentistaService{
     private ObjectMapper mapper;
 
     @Override
-    public DentistaResponseDTO salvar(Dentista dentista) {
+    public Optional<DentistaResponseDTO> salvar(DentistaRequestDTO requestDTO) {
+        Dentista dentista = mapper.convertValue(requestDTO,Dentista.class);
         Dentista save = iDentistaRepository.save(dentista);
-        save.setConsultas(new ArrayList());
-        System.out.println(save);
-        return mapper.convertValue(save,DentistaResponseDTO.class);
+        DentistaResponseDTO responseDTO = mapper.convertValue(save,DentistaResponseDTO.class);
+        responseDTO.setConsultas(new ArrayList<>());
+        return Optional.ofNullable(responseDTO);
     }
 
     @Override
     public Optional<DentistaResponseDTO> buscar(int matriculaCadastro) {
-        Optional<Dentista> byId = iDentistaRepository.findById(matriculaCadastro);
-//        List<DentistaConsultaResponseDTO> consultaResponseDTOList = new ArrayList<>();
-        DentistaResponseDTO dentistaResponse = mapper.convertValue(byId, DentistaResponseDTO.class);
-//        byId.get().getConsultas().forEach(consulta -> {
-//            consultaResponseDTOList.add(mapper.convertValue(consulta,DentistaConsultaResponseDTO.class));
-//        });
-//        dentistaResponse.setConsultas(consultaResponseDTOList);
-        return Optional.ofNullable(dentistaResponse);
+        Optional<Dentista> dentistas = iDentistaRepository.findById(matriculaCadastro);
+        return Optional.ofNullable(mapper.convertValue(dentistas, DentistaResponseDTO.class));
     }
-
-
 
     @Override
     public List<DentistaResponseDTO> buscarTodos() {
-        List<Dentista> all = iDentistaRepository.findAll();
+        List<Dentista> dentistas = iDentistaRepository.findAll();
         List<DentistaResponseDTO> dentistaResponseDTOList = new ArrayList<>();
-        all.forEach(dentista -> {
-//            List<DentistaConsultaResponseDTO> consultaResponseDTO = new ArrayList<>();
-//            dentista.getConsultas().forEach(consulta -> {
-//                consultaResponseDTO.add(mapper.convertValue(consulta,DentistaConsultaResponseDTO.class));
-//            });
-            DentistaResponseDTO dentistaResponse = mapper.convertValue(dentista, DentistaResponseDTO.class);
-//            dentistaResponse.setConsultas(consultaResponseDTO);
-            dentistaResponseDTOList.add(dentistaResponse);
+        dentistas.forEach(dentista -> {
+            dentistaResponseDTOList.add(mapper.convertValue(dentista,DentistaResponseDTO.class));
         });
         return dentistaResponseDTOList;
     }
 
     @Override
-    public Optional<DentistaResponseDTO> atualizar(int matriculaCadastro, Dentista dentista) {
-//        Optional<DentistaResponseDTO> dentistaBusca = iDentistaRepository.findById(matriculaCadastro);
-//        Optional<DentistaResponseDTO> dentistaResponseDTO = null;
-//        if (dentistaBusca.isPresent()){
-//            dentista.setMatriculaCadastro(matriculaCadastro);
-//            Dentista save = iDentistaRepository.save(dentista);
-//            List<DentistaConsultaResponseDTO> consultaResponseDTO = new ArrayList<>();
-//            save.getConsultas().forEach(consulta -> {
-//                consultaResponseDTO.add(mapper.convertValue(consulta,DentistaConsultaResponseDTO.class));
-//            });
-//            DentistaResponseDTO dentistaResponse = mapper.convertValue(save, DentistaResponseDTO.class);
-////            dentistaResponse.setConsultas(consultaResponseDTO);
-//            dentistaResponseDTO = Optional.ofNullable(dentistaResponse);
-//        }
-//        return dentistaResponseDTO;
-        return null;
+    public Optional<DentistaResponseDTO> atualizar(int matriculaCadastro, DentistaRequestDTO requestDTO) {
+        Optional<Dentista> dentista1 = iDentistaRepository.findById(matriculaCadastro);
+        Optional<DentistaResponseDTO> responseDTO = null;
+        if (dentista1.isPresent()){
+            Dentista dentista2 = dentista1.get();
+            dentista2.setMatriculaCadastro(matriculaCadastro);
+            dentista2.setNome(requestDTO.getNome());
+            dentista2.setSobrenome(requestDTO.getSobrenome());
+            Dentista dentistaSalvo = iDentistaRepository.save(dentista2);
+            responseDTO = Optional.ofNullable(mapper.convertValue(dentistaSalvo, DentistaResponseDTO.class));
+        }
+        return responseDTO;
     }
 }

@@ -1,10 +1,9 @@
 package com.example.consultorio.repository;
 
-import com.example.consultorio.model.Dentista;
+import com.example.consultorio.model.Perfil;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IDentistaRepository  extends JpaRepository<Dentista,Integer> {
-
+public interface IPerfilRepository extends JpaRepository<Perfil, Integer> {
 }

@@ -1,7 +1,7 @@
 package com.example.consultorio.controller;
 
+import com.example.consultorio.dto.request.PacienteRequestDTO;
 import com.example.consultorio.dto.response.PacienteResponseDTO;
-import com.example.consultorio.model.Paciente;
 import com.example.consultorio.service.impl.PacienteServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,18 +13,17 @@ import java.util.Optional;
 
 @RequestMapping("/pacientes")
 @RestController
-
 public class PacienteController {
     @Autowired
     private PacienteServiceImpl pacienteService;
 
     @PostMapping
-    public ResponseEntity<PacienteResponseDTO> salvar(@RequestBody Paciente paciente){
-        return ResponseEntity.status(HttpStatus.CREATED).body(pacienteService.salvar(paciente));
+    public ResponseEntity<Optional<PacienteResponseDTO>> salvar(@RequestBody PacienteRequestDTO requestDTO){
+        return ResponseEntity.status(HttpStatus.CREATED).body(pacienteService.salvar(requestDTO));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<PacienteResponseDTO>> buscar(@PathVariable int id){
+    public ResponseEntity<Optional<PacienteResponseDTO>> buscar (@PathVariable int id){
         Optional<PacienteResponseDTO> paciente = pacienteService.buscar(id);
         if (paciente.isPresent()){
             return ResponseEntity.status(HttpStatus.OK).body(paciente);
@@ -34,20 +33,20 @@ public class PacienteController {
     }
 
     @GetMapping
-    public List<PacienteResponseDTO> buscarTodos(){
-        return pacienteService.buscarTodos();
+    public ResponseEntity<List<PacienteResponseDTO>> buscarTodos(){
+        List<PacienteResponseDTO> pacienteResponseDTOList = pacienteService.buscarTodos();
+        return ResponseEntity.status(HttpStatus.OK).body(pacienteResponseDTOList);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Optional<PacienteResponseDTO>> atualizar(@PathVariable int id, @RequestBody Paciente paciente){
+    public ResponseEntity<String> atualizar(@PathVariable int id, @RequestBody PacienteRequestDTO requestDTO){
         Optional<PacienteResponseDTO> pacienteBusca = pacienteService.buscar(id);
         if (pacienteBusca.isPresent() ){
-            pacienteService.atualizar(id,paciente);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            pacienteService.atualizar(id,requestDTO);
+            return ResponseEntity.status(HttpStatus.OK).body("Atualizado");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
     }
 
     @DeleteMapping("/{id}")

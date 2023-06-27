@@ -1,6 +1,7 @@
 package com.example.consultorio.model;
 
 import lombok.*;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.persistence.*;
 
@@ -14,7 +15,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="TB_USUARIOS")
-public class Usuario {
+public class Usuario{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -22,7 +23,6 @@ public class Usuario {
     private String nome;
     private String email;
     private String senha;
-
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "perfil_id", referencedColumnName = "id")

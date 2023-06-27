@@ -13,7 +13,6 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "TB_PERFIS")
-
 public class Perfil {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -24,12 +24,14 @@ public class Consulta {
     private LocalDateTime horarioConsulta;
     private Boolean cancelada;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "dentista_id")
+    @JsonIgnoreProperties("consultas")
     private Dentista dentista;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "paciente_id")
+    @JsonIgnoreProperties("consultas")
     private Paciente paciente;
 
 }
