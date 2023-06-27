@@ -1,81 +1,37 @@
 package com.example.consultorio.model;
 
-import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
-public class Consulta {
-    private int id;
-    private Paciente paciente;
-    private Dentista dentista;
-    private LocalDateTime horarioConsulta;
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 
+@Entity
+@Table(name = "TB_CONSULTAS")
+
+public class Consulta {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private LocalDateTime horarioConsulta;
     private Boolean cancelada;
 
-    public Consulta() {
-    }
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "dentista_id")
+    @JsonIgnoreProperties("consultas")
+    private Dentista dentista;
 
-    public Consulta(Paciente paciente, Dentista dentista, LocalDateTime horarioConsulta) {
-        this.paciente = paciente;
-        this.dentista = dentista;
-        this.horarioConsulta = horarioConsulta;
-        this.cancelada = false;
-    }
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "paciente_id")
+    @JsonIgnoreProperties("consultas")
+    private Paciente paciente;
 
-    public Consulta(int id, Paciente paciente, Dentista dentista, LocalDateTime horarioConsulta) {
-        this.id = id;
-        this.paciente = paciente;
-        this.dentista = dentista;
-        this.horarioConsulta = horarioConsulta;
-        this.cancelada = false;
-    }
-
-    public Boolean getCancelada() {
-        return cancelada;
-    }
-
-    public void setCancelada(Boolean cancelada) {
-        this.cancelada = cancelada;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Paciente getPaciente() {
-        return paciente;
-    }
-
-    public void setPaciente(Paciente paciente) {
-        this.paciente = paciente;
-    }
-
-    public Dentista getDentista() {
-        return dentista;
-    }
-
-    public void setDentista(Dentista dentista) {
-        this.dentista = dentista;
-    }
-
-    public LocalDateTime getHorarioConsulta() {
-        return horarioConsulta;
-    }
-
-    public void setHorarioConsulta(LocalDateTime horarioConsulta) {
-        this.horarioConsulta = horarioConsulta;
-    }
-
-    @Override
-    public String toString() {
-        return "Consulta{" +
-                "id=" + id +
-                ", paciente=" + paciente +
-                ", dentista=" + dentista +
-                ", horarioConsulta=" + horarioConsulta +
-                '}';
-    }
 }

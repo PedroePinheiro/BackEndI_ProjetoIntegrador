@@ -1,93 +1,36 @@
 package com.example.consultorio.model;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
+@Entity
+@Table(name="TB_PACIENTES")
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Paciente {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String nome;
     private String sobrenome;
-    private Endereco endereco;
-
     private String rg;
     private LocalDate dataAlta;
 
-    public Paciente() {
-    }
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "endereco_id", referencedColumnName = "id")
+    private Endereco endereco;
 
-    public Paciente(int id, String nome, String sobrenome, Endereco endereco, String rg, LocalDate dataAlta) {
-        this.id = id;
-        this.nome = nome;
-        this.sobrenome = sobrenome;
-        this.endereco = endereco;
-        this.rg = rg;
-        this.dataAlta = dataAlta;
-    }
+    @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Consulta> consultas;
 
-    public Paciente(String nome, String sobrenome, Endereco endereco, String rg, LocalDate dataAlta) {
-        this.nome = nome;
-        this.sobrenome = sobrenome;
-        this.endereco = endereco;
-        this.rg = rg;
-        this.dataAlta = dataAlta;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getSobrenome() {
-        return sobrenome;
-    }
-
-    public void setSobrenome(String sobrenome) {
-        this.sobrenome = sobrenome;
-    }
-
-    public Endereco getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
-    }
-
-    public String getRg() {
-        return rg;
-    }
-
-    public void setRg(String rg) {
-        this.rg = rg;
-    }
-
-    public LocalDate getDataAlta() {
-        return dataAlta;
-    }
-
-    public void setDataAlta(LocalDate dataAlta) {
-        this.dataAlta = dataAlta;
-    }
-
-    @Override
-    public String toString() {
-        return "Paciente{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", sobrenome='" + sobrenome + '\'' +
-                ", endereco=" + endereco +
-                ", rg='" + rg + '\'' +
-                ", dataAlta=" + dataAlta +
-                '}';
-    }
 }
