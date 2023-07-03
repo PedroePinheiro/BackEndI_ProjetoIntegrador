@@ -2,6 +2,7 @@ package com.example.consultorio.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -9,11 +10,12 @@ import lombok.*;
 @ToString
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-
-public class PacienteRequestDTO {
-    private String nome;
-    private String sobrenome;
-    private String rg;
-    private String dataAlta;
-    private EnderecoRequestDTO endereco;
+public class EnderecoRequestDTO {
+    private String rua;
+    private String numero;
+    private String bairro;
+    private String complemento;
+    private String cidade;
+    private String estado;
+    private int cep;
 }

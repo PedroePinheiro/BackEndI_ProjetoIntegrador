@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -21,7 +20,7 @@ public class Consulta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private LocalDateTime horarioConsulta;
+    private String  horarioConsulta;
     private Boolean cancelada;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

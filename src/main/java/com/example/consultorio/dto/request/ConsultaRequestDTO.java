@@ -3,8 +3,6 @@ package com.example.consultorio.dto.request;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,5 +14,5 @@ import java.time.LocalDateTime;
 public class ConsultaRequestDTO {
     private int pacienteId;
     private int matriculaDentista;
-    private LocalDateTime horarioConsulta;
+    private String horarioConsulta;
 }

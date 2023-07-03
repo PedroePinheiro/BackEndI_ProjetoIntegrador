@@ -7,9 +7,12 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Builder
+@ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PerfilRequestDTO {
-    private String nome;
+public class UsuarioLoginDTO {
+    private String login;
+    private String senha;
+
+
 }

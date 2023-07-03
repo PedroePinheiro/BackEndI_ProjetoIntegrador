@@ -4,13 +4,13 @@ import com.example.consultorio.model.Consulta;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface IConsultaRepository extends JpaRepository<Consulta,Integer> {
 
-    Optional<Consulta> findByPacienteId(int id);
-    Optional<Consulta> findByDentistaMatriculaCadastro(int id);
+    List<Consulta> findByPacienteId(int id);
+    List<Consulta> findByDentistaMatriculaCadastro(int id);
 
 
 }

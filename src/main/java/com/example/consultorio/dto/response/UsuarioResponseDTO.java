@@ -1,4 +1,4 @@
-package com.example.consultorio.dto.request;
+package com.example.consultorio.dto.response;
 
 import com.example.consultorio.security.UsuarioRole;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -8,13 +8,11 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Builder
+@ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UsuarioRequestDTO {
-
-    private String nome;
+public class UsuarioResponseDTO {
+    private Long id;
     private String email;
-    private String senha;
     private UsuarioRole usuarioRole;
 }

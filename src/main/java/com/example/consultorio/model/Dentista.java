@@ -28,4 +28,8 @@ public class Dentista {
     @OneToMany(mappedBy = "dentista",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Consulta> consultas;
 
+    public Dentista(String nome, String sobrenome) {
+        this.nome = nome;
+        this.sobrenome = sobrenome;
+    }
 }
