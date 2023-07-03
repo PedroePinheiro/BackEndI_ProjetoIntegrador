@@ -2,6 +2,8 @@ package com.example.consultorio.service.impl;
 
 import com.example.consultorio.dto.request.ConsultaRequestDTO;
 import com.example.consultorio.dto.response.*;
+import com.example.consultorio.exception.InvalidDataException;
+import com.example.consultorio.exception.ResourceNotFoundException;
 import com.example.consultorio.model.Consulta;
 import com.example.consultorio.model.Dentista;
 import com.example.consultorio.model.Paciente;
@@ -32,35 +34,39 @@ public class ConsultaServiceImpl implements IConsultaService{
     private ObjectMapper mapper;
 
     @Override
-    public Optional<ConsultaResponseDTO> salvar(ConsultaRequestDTO requestDTO) {
+    public Optional<ConsultaResponseDTO> salvar(ConsultaRequestDTO requestDTO) throws InvalidDataException, ResourceNotFoundException {
         Optional<PacienteResponseDTO> pacienteDTO = pacienteService.buscar(requestDTO.getPacienteId());
         Optional<DentistaResponseDTO> dentistaDTO = dentistaService.buscar(requestDTO.getMatriculaDentista());
-        ConsultaResponseDTO consultaResponseDTO = null;
         if (pacienteDTO.isPresent() && dentistaDTO.isPresent()){
-            mapper.registerModule(new JavaTimeModule());
-            Paciente paciente = mapper.convertValue(pacienteDTO.get(),Paciente.class);
-            Dentista dentista = mapper.convertValue(dentistaDTO.get(),Dentista.class);
-            Consulta consulta = new Consulta(0,requestDTO.getHorarioConsulta(),false,dentista,paciente);
-            Consulta save = iConsultaRepository.save(consulta);
-            consultaResponseDTO = mapper.convertValue(save,ConsultaResponseDTO.class);
-        }
-        return Optional.ofNullable(consultaResponseDTO);
+            try {
+                mapper.registerModule(new JavaTimeModule());
+                Paciente paciente = mapper.convertValue(pacienteDTO.get(),Paciente.class);
+                Dentista dentista = mapper.convertValue(dentistaDTO.get(),Dentista.class);
+                Consulta consulta = new Consulta(0,requestDTO.getHorarioConsulta(),false,dentista,paciente);
+                Consulta save = iConsultaRepository.save(consulta);
+                return Optional.ofNullable(mapper.convertValue(save, ConsultaResponseDTO.class));
+            } catch (IllegalArgumentException e) {
+                throw new InvalidDataException("Não foram informados todos os dados da consulta");
+            }
+        } else throw new ResourceNotFoundException("Recurso não encontrado para os id's informados");
     }
 
     @Override
-    public Optional<ConsultaResponseDTO> atualizar(int id, ConsultaRequestDTO requestDTO) {
+    public Optional<ConsultaResponseDTO> atualizar(int id, ConsultaRequestDTO requestDTO) throws ResourceNotFoundException, InvalidDataException {
         Optional<PacienteResponseDTO> pacienteDTO = pacienteService.buscar(requestDTO.getPacienteId());
         Optional<DentistaResponseDTO> dentistaDTO = dentistaService.buscar(requestDTO.getMatriculaDentista());
-        ConsultaResponseDTO consultaResponseDTO = null;
         if (pacienteDTO.isPresent() && dentistaDTO.isPresent()){
-            mapper.registerModule(new JavaTimeModule());
-            Paciente paciente = mapper.convertValue(pacienteDTO,Paciente.class);
-            Dentista dentista = mapper.convertValue(dentistaDTO,Dentista.class);
-            Consulta consulta = new Consulta(id,requestDTO.getHorarioConsulta(),false,dentista,paciente);
-            Consulta save = iConsultaRepository.save(consulta);
-            consultaResponseDTO = mapper.convertValue(save,ConsultaResponseDTO.class);
-        }
-        return Optional.ofNullable(consultaResponseDTO);
+            try {
+                mapper.registerModule(new JavaTimeModule());
+                Paciente paciente = mapper.convertValue(pacienteDTO,Paciente.class);
+                Dentista dentista = mapper.convertValue(dentistaDTO,Dentista.class);
+                Consulta consulta = new Consulta(id,requestDTO.getHorarioConsulta(),false,dentista,paciente);
+                Consulta save = iConsultaRepository.save(consulta);
+                return Optional.ofNullable(mapper.convertValue(save, ConsultaResponseDTO.class));
+            } catch (IllegalArgumentException e) {
+                throw new InvalidDataException("Não foram informados todas as dados da consulta");
+            }
+        }else throw new ResourceNotFoundException("Recurso não encontrado para o id: " + (pacienteDTO.isPresent() ? requestDTO.getMatriculaDentista() : id));
     }
 
     @Override
@@ -83,15 +89,22 @@ public class ConsultaServiceImpl implements IConsultaService{
     }
 
     @Override
-    public Optional<ConsultaPacienteResponseDTO> buscarPorPaciente(int id) {
-        Optional<Consulta> byPacienteId = iConsultaRepository.findByPacienteId(id);
-        return Optional.ofNullable(mapper.convertValue(byPacienteId, ConsultaPacienteResponseDTO.class));
-
+    public List<ConsultaPacienteResponseDTO> buscarPorPaciente(int id) {
+        List<Consulta> byPacienteId = iConsultaRepository.findByPacienteId(id);
+        List<ConsultaPacienteResponseDTO> responseDTOList = new ArrayList();
+        byPacienteId.forEach(consulta -> {
+            responseDTOList.add(mapper.convertValue(consulta,ConsultaPacienteResponseDTO.class));
+        });
+        return responseDTOList;
     }
 
     @Override
-    public Optional<ConsultaDentistaResponseDTO> buscarPorDentista(int id) {
-        Optional<Consulta> byDentistaMatriculaCadastro = iConsultaRepository.findByDentistaMatriculaCadastro(id);
-        return Optional.ofNullable(mapper.convertValue(byDentistaMatriculaCadastro,ConsultaDentistaResponseDTO.class));
+    public List<ConsultaDentistaResponseDTO> buscarPorDentista(int id) {
+        List<Consulta> byDentistaMatriculaCadastro = iConsultaRepository.findByDentistaMatriculaCadastro(id);
+        List<ConsultaDentistaResponseDTO> dentistaResponseDTOList = new ArrayList();
+        byDentistaMatriculaCadastro.forEach(consulta -> {
+            dentistaResponseDTOList.add(mapper.convertValue(consulta,ConsultaDentistaResponseDTO.class));
+        });
+        return dentistaResponseDTOList;
     }
 }

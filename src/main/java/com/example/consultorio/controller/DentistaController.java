@@ -2,6 +2,8 @@ package com.example.consultorio.controller;
 
 import com.example.consultorio.dto.request.DentistaRequestDTO;
 import com.example.consultorio.dto.response.DentistaResponseDTO;
+import com.example.consultorio.exception.InvalidDataException;
+import com.example.consultorio.exception.ResourceNotFoundException;
 import com.example.consultorio.service.impl.DentistaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,12 +21,12 @@ public class DentistaController {
     private DentistaServiceImpl dentistaService;
 
     @PostMapping
-    public ResponseEntity<Optional<DentistaResponseDTO>> salvar(@RequestBody DentistaRequestDTO requestDTO){
+    public ResponseEntity<Optional<DentistaResponseDTO>> salvar(@RequestBody DentistaRequestDTO requestDTO) throws InvalidDataException {
         return ResponseEntity.status(HttpStatus.CREATED).body(dentistaService.salvar(requestDTO));
     }
 
     @GetMapping ("/{matriculaCadastro}")
-    public ResponseEntity<Optional<DentistaResponseDTO>> buscar(@PathVariable int matriculaCadastro){
+    public ResponseEntity<Optional<DentistaResponseDTO>> buscar(@PathVariable int matriculaCadastro) throws ResourceNotFoundException {
         Optional<DentistaResponseDTO> dentista = dentistaService.buscar(matriculaCadastro);
         if (dentista.isPresent()){
             return ResponseEntity.status(HttpStatus.OK).body(dentista);
@@ -40,7 +42,7 @@ public class DentistaController {
     }
 
     @PutMapping("/{matriculaCadastro}")
-    public ResponseEntity<Optional<DentistaResponseDTO>> atualizar(@PathVariable int matriculaCadastro, @RequestBody DentistaRequestDTO requestDTO){
+    public ResponseEntity<Optional<DentistaResponseDTO>> atualizar(@PathVariable int matriculaCadastro, @RequestBody DentistaRequestDTO requestDTO) throws InvalidDataException, ResourceNotFoundException {
        Optional<DentistaResponseDTO> dentistaBusca = dentistaService.atualizar(matriculaCadastro,requestDTO);
        if (dentistaBusca.isPresent()){
            dentistaService.atualizar(matriculaCadastro, requestDTO);

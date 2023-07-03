@@ -4,6 +4,8 @@ import com.example.consultorio.dto.request.ConsultaRequestDTO;
 import com.example.consultorio.dto.response.ConsultaDentistaResponseDTO;
 import com.example.consultorio.dto.response.ConsultaPacienteResponseDTO;
 import com.example.consultorio.dto.response.ConsultaResponseDTO;
+import com.example.consultorio.exception.InvalidDataException;
+import com.example.consultorio.exception.ResourceNotFoundException;
 import com.example.consultorio.service.IConsultaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +24,7 @@ public class ConsultaController {
     private IConsultaService consultaService;
 
     @PostMapping
-    public ResponseEntity<Optional<ConsultaResponseDTO>> salvar(@RequestBody ConsultaRequestDTO requestDTO){
+    public ResponseEntity<Optional<ConsultaResponseDTO>> salvar(@RequestBody ConsultaRequestDTO requestDTO) throws InvalidDataException, ResourceNotFoundException {
         Optional<ConsultaResponseDTO> consultaResponseDTO = consultaService.salvar(requestDTO);
         if (consultaResponseDTO.isPresent()){
            return ResponseEntity.status(HttpStatus.CREATED).body(consultaResponseDTO);
@@ -32,7 +34,7 @@ public class ConsultaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> atualizar(@PathVariable int id, @RequestBody ConsultaRequestDTO requestDTO){
+    public ResponseEntity<Object> atualizar(@PathVariable int id, @RequestBody ConsultaRequestDTO requestDTO) throws InvalidDataException, ResourceNotFoundException {
         Optional<ConsultaResponseDTO> consultaResponseDTO = consultaService.atualizar(id,requestDTO);
         if (consultaResponseDTO.isPresent()){
             return ResponseEntity.status(HttpStatus.OK).build();
@@ -47,20 +49,17 @@ public class ConsultaController {
     }
 
     @GetMapping("/paciente/{id}")
-    public Optional<ConsultaPacienteResponseDTO> buscarPorPaciente(@PathVariable int id){
-        Optional<ConsultaPacienteResponseDTO> pacienteResponseDTO = consultaService.buscarPorPaciente(id);
+    public List<ConsultaPacienteResponseDTO> buscarPorPaciente(@PathVariable int id){
         return consultaService.buscarPorPaciente(id);
     }
 
     @GetMapping("/dentista/{id}")
-    public Optional<ConsultaDentistaResponseDTO> buscarPorDentista(@PathVariable int id){
-        Optional<ConsultaDentistaResponseDTO> dentistaResponseDTO = consultaService.buscarPorDentista(id);
+    public List<ConsultaDentistaResponseDTO> buscarPorDentista(@PathVariable int id){
         return consultaService.buscarPorDentista(id);
     }
 
     @GetMapping
     public ResponseEntity<List<ConsultaResponseDTO>> buscarTodos(){
-        List<ConsultaResponseDTO> consultaResponseDTOList = consultaService.buscarTodos();
         return ResponseEntity.status(HttpStatus.OK).body(consultaService.buscarTodos());
     }
 

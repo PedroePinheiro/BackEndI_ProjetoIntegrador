@@ -2,6 +2,9 @@ package com.example.consultorio.controller;
 
 
 import com.example.consultorio.dto.request.UsuarioRequestDTO;
+import com.example.consultorio.dto.response.UsuarioResponseDTO;
+import com.example.consultorio.exception.InvalidDataException;
+import com.example.consultorio.exception.ResourceNotFoundException;
 import com.example.consultorio.model.Usuario;
 import com.example.consultorio.service.impl.UsuarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +23,13 @@ public class UsuarioController {
     private UsuarioServiceImpl usuarioService;
 
     @PostMapping
-    public ResponseEntity<Usuario> salvar(@RequestBody UsuarioRequestDTO requestDTO){
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.salvar(requestDTO));
+    public ResponseEntity<UsuarioResponseDTO> salvar(@RequestBody UsuarioRequestDTO requestDTO) throws InvalidDataException {
+            return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.salvar(requestDTO));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Usuario>> buscar(@PathVariable int id){
-        Optional<Usuario> usuario = usuarioService.buscar(id);
+    public ResponseEntity<Optional<UsuarioResponseDTO>> buscar(@PathVariable int id) throws ResourceNotFoundException {
+        Optional<UsuarioResponseDTO> usuario = usuarioService.buscar(id);
         if (usuario.isPresent()){
             return ResponseEntity.status(HttpStatus.OK).body(usuario);
         }else {
@@ -35,14 +38,14 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Usuario>> buscarTodos(){
-        List<Usuario> usuarioList = usuarioService.buscarTodos();
+    public ResponseEntity<List<UsuarioResponseDTO>> buscarTodos(){
+        List<UsuarioResponseDTO> usuarioList = usuarioService.buscarTodos();
         return ResponseEntity.status(HttpStatus.OK).body(usuarioList);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> atualizar (@PathVariable int id, @RequestBody UsuarioRequestDTO requestDTO){
-        Optional<Usuario> usuarioBusca = usuarioService.buscar(id);
+    public ResponseEntity<UsuarioResponseDTO> atualizar (@PathVariable int id, @RequestBody UsuarioRequestDTO requestDTO) throws InvalidDataException, ResourceNotFoundException {
+        Optional<UsuarioResponseDTO> usuarioBusca = usuarioService.buscar(id);
         if (usuarioBusca.isPresent()){
             usuarioService.atualizar(id,requestDTO);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -52,8 +55,8 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity excluir(@PathVariable int id){
-        Optional<Usuario> usuario = usuarioService.buscar(id);
+    public ResponseEntity excluir(@PathVariable int id) throws ResourceNotFoundException {
+        Optional<UsuarioResponseDTO> usuario = usuarioService.buscar(id);
         if (usuario.isPresent()){
             usuarioService.excluir(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

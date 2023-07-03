@@ -1,5 +1,15 @@
-Back End I
 
+
+## GRUPO 07
+- Mauro Lucio Marques - mauroluciomartins@gmail.com
+- Pedro Pinheiro - pedroeapinheiro@outlook.com
+- Mauricio Sampaio - mauricio-sampaio97@hotmail.com
+
+## AVISO
+Adicionado aquivo do postman pronto para uso. 
+
+
+# Back End
 Trabalho integrador:
 Sistema de reserva de consultas
 Desejamos implementar um sistema que permita administrar a reserva/marcação

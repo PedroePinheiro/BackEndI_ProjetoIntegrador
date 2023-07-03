@@ -3,7 +3,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -24,7 +23,7 @@ public class Paciente {
     private String nome;
     private String sobrenome;
     private String rg;
-    private LocalDate dataAlta;
+    private String dataAlta;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
@@ -32,5 +31,13 @@ public class Paciente {
 
     @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Consulta> consultas;
+
+
+    public Paciente(String nome, String sobrenome, String rg, String dataAlta) {
+        this.nome = nome;
+        this.sobrenome = sobrenome;
+        this.rg = rg;
+        this.dataAlta = dataAlta;
+    }
 
 }

@@ -4,7 +4,6 @@ import com.example.consultorio.model.Endereco;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -20,7 +19,7 @@ public class PacienteResponseDTO {
     private String nome;
     private String sobrenome;
     private String rg;
-    private LocalDate dataAlta;
+    private String dataAlta;
     private Endereco endereco;
     private List<ConsultaPacienteResponseDTO> consultas;
 
